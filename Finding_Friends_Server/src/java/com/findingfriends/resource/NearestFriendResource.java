@@ -28,7 +28,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
-import org.apache.coyote.RequestGroupInfo;
 
 /**
  * REST Web Service
@@ -84,6 +83,7 @@ public class NearestFriendResource {
                 User user;
                 UserWithDistance userWithDistance = new UserWithDistance();
                 user = userController.getUser(model.getUser_id());
+                user.setUserName(model.getName());
                 userWithDistance.setUser(user);
                 double dist = DistanceUtils.distance(user.getGps_lat(), user.getGps_long(), request.getLat(), request.getLog());
                 userWithDistance.setDist(dist);

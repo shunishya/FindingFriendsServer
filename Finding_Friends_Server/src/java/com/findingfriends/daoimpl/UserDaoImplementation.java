@@ -86,7 +86,11 @@ public class UserDaoImplementation implements UserDao {
 
     @Override
     public boolean isUserPresent(String phoneNumber) {
-        return true;
+        if (getUser(phoneNumber) == null) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     @Override
