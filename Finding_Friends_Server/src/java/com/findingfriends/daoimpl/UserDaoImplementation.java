@@ -127,7 +127,7 @@ public class UserDaoImplementation implements UserDao {
     @Override
     public boolean updateUser(String user_id, double gps_lat, double gps_long) {
 
-        String sql = "UPDATE subject SET gps_lat='" + gps_lat + "', gps_long='" + gps_long + "' where user_id='" + user_id + "';";
+        String sql = "UPDATE user SET gps_lat='" + gps_lat + "', gps_long='" + gps_long + "' where user_id='" + user_id + "';";
         try {
             con = SQLUtility.getConnection();
             stmt = con.createStatement();
@@ -147,7 +147,7 @@ public class UserDaoImplementation implements UserDao {
 
     @Override
     public User getUserById(String user_id) {
-        User user = new User();
+        User user = null;
         String sql = "SELECT * from user WHERE `user_id`= '" + user_id + "';";
         try {
             con = SQLUtility.getConnection();
@@ -159,6 +159,7 @@ public class UserDaoImplementation implements UserDao {
                 String userId = rs.getString("user_id");
                 double gps_lat = rs.getDouble("gps_lat");
                 double gps_long = rs.getDouble("gps_long");
+                user=new User();
                 user.setPhoneNumber(phoneNumbers);
                 user.setUserName(userName);
                 user.setGps_lat(gps_lat);

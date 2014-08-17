@@ -67,7 +67,7 @@ public class RegisterResource {
     public RegisterResponse register(RegisterRequest request) {
         RegisterResponse response = new RegisterResponse();
         UserController userController = new UserController();
-        User user = new User();
+        User user = null;
         if (request != null) {
             user = userController.getUser(request.getPhoneNumber());
             if (user != null) {
@@ -78,6 +78,7 @@ public class RegisterResource {
 
             } else {
                 String uuid = UUID.randomUUID().toString();
+                user = new User();
                 user.setGps_lat(request.getGps_lat());
                 user.setGps_long(request.getGps_long());
                 user.setPhoneNumber(request.getPhoneNumber());
