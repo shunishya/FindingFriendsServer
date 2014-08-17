@@ -95,7 +95,7 @@ public class UserDaoImplementation implements UserDao {
 
     @Override
     public User getUser(String phoneNumber) {
-        User user = new User();
+        User user = null;
         String sql = "SELECT * from user WHERE `phonenumber`= '" + phoneNumber + "';";
         try {
             con = SQLUtility.getConnection();
@@ -107,6 +107,7 @@ public class UserDaoImplementation implements UserDao {
                 String userId = rs.getString("user_id");
                 double gps_lat = rs.getDouble("gps_lat");
                 double gps_long = rs.getDouble("gps_long");
+                user=new User();
                 user.setPhoneNumber(phoneNumbers);
                 user.setUserName(userName);
                 user.setGps_lat(gps_lat);

@@ -56,7 +56,19 @@ public class NearestFriendResource {
     @Produces("application/json")
     public String getJson() {
         //TODO return proper representation object
-        return "Get Nearest Friends.";
+        ContactsController contactsController = new ContactsController();
+        UserController userController = new UserController();
+        List<ContactModel> contact = contactsController.getallUser("67136125-0e8e-4933-a114-286154d87dd1");
+        String result = "";
+        for (ContactModel model : contact) {
+            User user;
+
+            UserWithDistance userWithDistance = new UserWithDistance();
+            user = userController.getUserById(model.getUser_id());
+            user.setUserName(model.getName());
+            result = result + model.getName();
+        }
+        return result;
     }
 
     /**
@@ -81,8 +93,9 @@ public class NearestFriendResource {
             List<ContactModel> contact = contactsController.getallUser(request.getUser_id());
             for (ContactModel model : contact) {
                 User user;
+                System.out.println(model.getName());
                 UserWithDistance userWithDistance = new UserWithDistance();
-                user = userController.getUser(model.getUser_id());
+                user = userController.getUserById(model.getUser_id());
                 user.setUserName(model.getName());
                 userWithDistance.setUser(user);
                 double dist = DistanceUtils.distance(user.getGps_lat(), user.getGps_long(), request.getLat(), request.getLog());
