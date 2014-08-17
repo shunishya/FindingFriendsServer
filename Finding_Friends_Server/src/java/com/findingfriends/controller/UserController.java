@@ -29,8 +29,8 @@ public class UserController {
         return userDaoImplementation.getUser(user_id);
     }
 
-    public boolean isUserPresent(String user_id) {
-        return userDaoImplementation.isUserPresent(user_id);
+    public boolean isUserPresent(String phoneNumber) {
+        return userDaoImplementation.isUserPresent(phoneNumber);
     }
 
     public boolean updateUser(String user_id, double gps_lat, double gps_long) {
