@@ -104,7 +104,6 @@ public class NearestFriendResource {
             List<ContactModel> contact = contactsController.getallUser(request.getUser_id());
             for (ContactModel model : contact) {
                 User user;
-                System.out.println(model.getName());
                 UserWithDistance userWithDistance = new UserWithDistance();
                 user = userController.getUserById(model.getUser_id());
                 user.setUserName(model.getName());
@@ -141,10 +140,11 @@ public class NearestFriendResource {
         GroupOfFriendsResponse response = new GroupOfFriendsResponse();
         userController.updateUser(request.getUser_id(), request.getGps_lat(), request.getGps_long());
         for (String id : request.getListOfFriends()) {
-            User user = userController.getUser(id);
+            User user = userController.getUserById(id);
             UserWithDistance userWithDistance = new UserWithDistance();
             userWithDistance.setUser(user);
             double dist = DistanceUtils.distance(user.getGps_lat(), user.getGps_long(), request.getGps_lat(), request.getGps_long());
+           System.out.println(dist);
             userWithDistance.setDist(dist);
             listUsers.add(userWithDistance);
         }
