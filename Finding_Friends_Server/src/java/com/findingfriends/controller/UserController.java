@@ -36,7 +36,8 @@ public class UserController {
     public boolean updateUser(String user_id, double gps_lat, double gps_long) {
         return userDaoImplementation.updateUser(user_id, gps_lat, gps_long);
     }
-public User getUserById(String user_id){
-    return userDaoImplementation.getUserById(user_id);
-}
+
+    public User getUserById(String user_id) {
+        return userDaoImplementation.getUserById(user_id);
+    }
 }
