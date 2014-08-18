@@ -58,15 +58,26 @@ public class NearestFriendResource {
         //TODO return proper representation object
         ContactsController contactsController = new ContactsController();
         UserController userController = new UserController();
+        ArrayList<UserWithDistance> listUsers = new ArrayList<>();
         List<ContactModel> contact = contactsController.getallUser("67136125-0e8e-4933-a114-286154d87dd1");
         String result = "";
         for (ContactModel model : contact) {
             User user;
-
             UserWithDistance userWithDistance = new UserWithDistance();
             user = userController.getUserById(model.getUser_id());
             user.setUserName(model.getName());
-            result = result + model.getName();
+
+            user = userController.getUserById(model.getUser_id());
+            user.setUserName(model.getName());
+            userWithDistance.setUser(user);
+            double dist = DistanceUtils.distance(user.getGps_lat(), user.getGps_long(), 27.6783159, 85.3487139);
+            userWithDistance.setDist(dist);
+            listUsers.add(userWithDistance);
+            Collections.sort(listUsers);
+
+        }
+        for (UserWithDistance use : listUsers) {
+            result = result + ";" + use.getDist() + "";
         }
         return result;
     }

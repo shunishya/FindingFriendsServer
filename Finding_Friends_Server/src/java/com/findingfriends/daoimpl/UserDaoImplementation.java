@@ -66,12 +66,13 @@ public class UserDaoImplementation implements UserDao {
                 String user_id = rs.getString("user_id");
                 double gps_lat = rs.getDouble("gps_lat");
                 double gps_long = rs.getDouble("gps_long");
+                long time = rs.getLong("time");
                 user.setPhoneNumber(phoneNumber);
                 user.setUserName(userName);
                 user.setGps_lat(gps_lat);
                 user.setGps_long(gps_long);
                 user.setUser_id(user_id);
-
+                user.setTime(time);
                 userList.add(user);
             }
         } catch (InstantiationException ex) {
@@ -107,12 +108,14 @@ public class UserDaoImplementation implements UserDao {
                 String userId = rs.getString("user_id");
                 double gps_lat = rs.getDouble("gps_lat");
                 double gps_long = rs.getDouble("gps_long");
-                user=new User();
+                long time = rs.getLong("time");
+                user = new User();
                 user.setPhoneNumber(phoneNumbers);
                 user.setUserName(userName);
                 user.setGps_lat(gps_lat);
                 user.setGps_long(gps_long);
                 user.setUser_id(userId);
+                user.setTime(time);
 
             }
         } catch (InstantiationException ex) {
@@ -127,8 +130,8 @@ public class UserDaoImplementation implements UserDao {
 
     @Override
     public boolean updateUser(String user_id, double gps_lat, double gps_long) {
-
-        String sql = "UPDATE user SET gps_lat='" + gps_lat + "', gps_long='" + gps_long + "' where user_id='" + user_id + "';";
+        long time = System.currentTimeMillis();
+        String sql = "UPDATE user SET gps_lat='" + gps_lat + "', gps_long='" + gps_long + "', time='" + time + "' where user_id='" + user_id + "';";
         try {
             con = SQLUtility.getConnection();
             stmt = con.createStatement();
@@ -160,12 +163,14 @@ public class UserDaoImplementation implements UserDao {
                 String userId = rs.getString("user_id");
                 double gps_lat = rs.getDouble("gps_lat");
                 double gps_long = rs.getDouble("gps_long");
-                user=new User();
+                long time = rs.getLong("time");
+                user = new User();
                 user.setPhoneNumber(phoneNumbers);
                 user.setUserName(userName);
                 user.setGps_lat(gps_lat);
                 user.setGps_long(gps_long);
                 user.setUser_id(user_id);
+                user.setTime(time);
 
             }
         } catch (InstantiationException ex) {
