@@ -51,7 +51,7 @@ public class ContactsSyncResource {
     @GET
     public String getJson() {
         ContactsController contactController = new ContactsController();
-        List<ContactModel> contacts = contactController.getallUser("047fa532-9c33-44be-b815-49ac5779f9f0");
+        List<ContactModel> contacts = contactController.getallUser("fa6be497-6ad8-4842-a0ec-0a327d7e556e");
         return contacts.get(0).getName();
     }
 
@@ -72,34 +72,42 @@ public class ContactsSyncResource {
     public SyncContactResponse syncContact(SyncContactRequest contactSyncRequest) {
         UserController userController = new UserController();
         ContactsController contactController = new ContactsController();
-        List<User> contactList = userController.getallUser();
         ArrayList<ContactModel> appContacts = new ArrayList<>();
         ArrayList<Contact> contactsTobeAddToDatabase = new ArrayList<>();
         SyncContactResponse response = new SyncContactResponse();
-        if (!contactList.isEmpty()) {
-            List<ContactModel> contactsFromUser = contactSyncRequest.getContactsTobeAdd();
 
-            for (int i = 0; i < contactList.size(); i++) {
-                for (ContactModel contactModel : contactsFromUser) {
-                    if (contactList.get(i).getPhoneNumber().equals(contactModel.getPhonenumber())) {
-                        Contact contactToBeAddToDataBase = new Contact();
-                        contactToBeAddToDataBase.setName(contactModel.getName());
-                        contactToBeAddToDataBase.setParent_id(contactSyncRequest.getUser_id());
-                        contactToBeAddToDataBase.setPhoneNumber(contactModel.getPhonenumber());
-                        contactToBeAddToDataBase.setUser_id(contactList.get(i).getUser_id());
-                        contactModel.setUser_id(contactList.get(i).getUser_id());
-                        appContacts.add(contactModel);
-                        contactsTobeAddToDatabase.add(contactToBeAddToDataBase);
-                    }
+        List<ContactModel> contactsFromUser = contactSyncRequest.getContactsTobeAdd();
+        List<ContactModel> contactOfUser = contactController.getallUser(contactSyncRequest.getUser_id());
+        for (ContactModel userContact : contactsFromUser) {
+            User user = userController.getUser(userContact.getPhonenumber());
+            if (user != null) {
+                ContactModel contactOnServer = contactController.getUserContactByPhone(contactSyncRequest.getUser_id(), userContact.getPhonenumber());
+                if (contactOnServer != null) {
+                    contactOnServer.setName(userContact.getName());
+                    appContacts.add(contactOnServer);
+                } else {
+                    Contact contactToBeAddToDataBase = new Contact();
+                    contactToBeAddToDataBase.setName(userContact.getName());
+                    contactToBeAddToDataBase.setParent_id(contactSyncRequest.getUser_id());
+                    contactToBeAddToDataBase.setPhoneNumber(userContact.getPhonenumber());
+                    contactToBeAddToDataBase.setUser_id(user.getUser_id());
+                    userContact.setUser_id(user.getUser_id());
+                    appContacts.add(userContact);
+                    contactsTobeAddToDatabase.add(contactToBeAddToDataBase);
                 }
             }
         }
-        if (contactController.addContact(contactsTobeAddToDatabase, contactSyncRequest.getUser_id())) {
-            response.setError(false);
-            response.setAppUsers(appContacts);
-        } else {
-            response.setError(true);
-            response.setMessage("User can't be added to server database.");
+        if (!contactsTobeAddToDatabase.isEmpty()) {
+            if (contactController.addContact(contactsTobeAddToDatabase, contactSyncRequest.getUser_id())) {
+                response.setError(false);
+                response.setAppUsers(appContacts);
+            } else {
+                response.setError(true);
+                response.setMessage("User can't be added to server database.");
+            }
+        }else{
+             response.setError(false);
+                response.setAppUsers(appContacts);
         }
         if (!contactSyncRequest.getContactsToBeDeleted().isEmpty()) {
             int count = contactController.deleteContacts(contactSyncRequest.getContactsToBeDeleted(), contactSyncRequest.getUser_id());
@@ -110,6 +118,9 @@ public class ContactsSyncResource {
                 response.setError(false);
                 response.setMessage("User can't be deleted from server database.");
             }
+        }else{
+             response.setError(false);
+                response.setAppUsers(appContacts);
         }
         return response;
     }

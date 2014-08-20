@@ -108,4 +108,33 @@ public class ContactDaoimplementation implements ContactsDao {
         return contactsTobeDelete.size();
     }
 
+    @Override
+    public ContactModel getContactOfUserByPhone(String parent_id, String phoneNumber) {
+        String sql = "SELECT * from contacts WHERE `parent_id`= '" + parent_id + "' AND `phonenumber`='" + phoneNumber + "';";
+        ContactModel contact = null;
+        try {
+            con = SQLUtility.getConnection();
+            stmt = con.createStatement();
+            rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                String userName = rs.getString("name");
+                String phoneNumbers = rs.getString("phonenumber");
+                String userId = rs.getString("user_id");
+
+                contact = new ContactModel();
+                contact.setName(userName);
+                contact.setPhonenumber(phoneNumber);
+                contact.setUser_id(userId);
+
+            }
+        } catch (InstantiationException ex) {
+            Logger.getLogger(UserDaoImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(UserDaoImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDaoImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return contact;
+    }
+
 }

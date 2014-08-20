@@ -40,6 +40,7 @@ public class ApplicationConfig extends Application {
         resources.add(com.findingfriends.resource.ContactsSyncResource.class);
         resources.add(com.findingfriends.resource.NearestFriendResource.class);
         resources.add(com.findingfriends.resource.RegisterResource.class);
+        resources.add(com.findingfriends.resource.UpdateInfo.class);
     }
     
 }
