@@ -108,7 +108,7 @@ public class NearestFriendResource {
                 user = userController.getUserById(model.getUser_id());
                 user.setUserName(model.getName());
                 userWithDistance.setUser(user);
-                double dist = DistanceUtils.distance(user.getGps_lat(), user.getGps_long(), request.getLat(), request.getLog());
+                double dist = DistanceUtils.distance(user.getGps_lat(),  user.getGps_long(), request.getLat(), request.getLog());
                 userWithDistance.setDist(dist);
                 listUsers.add(userWithDistance);
             }
