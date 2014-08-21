@@ -19,5 +19,6 @@ public interface ContactsDao {
 
     public List<ContactModel> displayAllContactOfUser(String user_id);
     public int deleteTheseContacts(List<String> contactsTobeDelete,String parent_id);
+    public ContactModel getContactOfUserByPhone(String parent_id, String phoneNumber);
 
 }

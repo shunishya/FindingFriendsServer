@@ -31,4 +31,8 @@ public class ContactsController {
 
     }
 
+    public ContactModel getUserContactByPhone(String parent_id, String phoneNumber) {
+        return contactDao.getContactOfUserByPhone(parent_id, phoneNumber);
+    }
+
 }
