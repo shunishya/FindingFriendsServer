@@ -17,7 +17,16 @@ public class User {
     double gps_lat;
     double gps_long;
     long time;
+    String password;
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
     public long getTime() {
         return time;
     }

@@ -29,7 +29,7 @@ public class UserDaoImplementation implements UserDao {
 
     @Override
     public boolean addUser(User user) {
-        String sql = "INSERT INTO user(`name`,`phonenumber`,`user_id`,`gps_lat`,`gps_long`,`time`) VALUES('" + user.getUserName() + "','" + user.getPhoneNumber() + "','" + user.getUser_id() + "','" + user.getGps_lat() + "','" + user.getGps_long() + "','" + user.getTime() + "');";
+        String sql = "INSERT INTO user(`name`,`phonenumber`,`user_id`,`gps_lat`,`gps_long`,`time`,`password`) VALUES('" + user.getUserName() + "','" + user.getPhoneNumber() + "','" + user.getUser_id() + "','" + user.getGps_lat() + "','" + user.getGps_long() + "','" + user.getTime() + "','" + user.getPassword() + "');";
         try {
             con = SQLUtility.getConnection();
             stmt = con.createStatement();
