@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.findingfriends.model;
 
 import java.util.ArrayList;
@@ -13,9 +12,27 @@ import java.util.ArrayList;
  * @author nitu
  */
 public class NearestFriendResponse {
-    
+
+    private boolean error;
+    private String message;
     private int count;
     private ArrayList<UserWithDistance> nearestPeople;
+
+    public boolean isError() {
+        return error;
+    }
+
+    public void setError(boolean error) {
+        this.error = error;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     public ArrayList<UserWithDistance> getNearestPeople() {
         return nearestPeople;
@@ -32,5 +49,5 @@ public class NearestFriendResponse {
     public void setCount(int count) {
         this.count = count;
     }
-    
+
 }

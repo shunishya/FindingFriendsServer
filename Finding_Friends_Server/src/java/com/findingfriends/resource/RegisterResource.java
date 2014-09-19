@@ -72,10 +72,16 @@ public class RegisterResource {
             if (request.getUserName() != null && request.getPhoneNumber() != null && request.getPassword() != null) {
                 user = userController.getUser(request.getPhoneNumber());
                 if (user != null) {
-                    boolean success = userController.updateUser(user.getUser_id(), request.getGps_lat(), request.getGps_long());
-                    response.setError(false);
-                    response.setMessage("Register sucess.");
-                    response.setUser_id(user.getUser_id());
+                    if (user.getPassword().equalsIgnoreCase(request.getPassword())) {
+                        boolean success = userController.updateUser(user.getUser_id(), request.getGps_lat(), request.getGps_long());
+                        response.setError(false);
+                        response.setMessage("Register sucess.");
+                        response.setUser_id(user.getUser_id());
+                    } else {
+                        response.setError(true);
+                        response.setMessage("Wrong password");
+                        response.setUser_id(null);
+                    }
 
                 } else {
 
