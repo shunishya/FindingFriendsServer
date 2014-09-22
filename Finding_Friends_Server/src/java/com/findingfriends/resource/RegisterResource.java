@@ -69,29 +69,55 @@ public class RegisterResource {
         UserController userController = new UserController();
         User user = null;
         if (request != null) {
-            user = userController.getUser(request.getPhoneNumber());
-            if (user != null) {
-                boolean success = userController.updateUser(user.getUser_id(), request.getGps_lat(), request.getGps_long());
-                response.setError(false);
-                response.setMessage("Register sucess.");
-                response.setUser_id(user.getUser_id());
+            if (request.getUserName() != null && request.getPhoneNumber() != null && request.getPassword() != null) {
+                user = userController.getUser(request.getPhoneNumber());
+                if (user != null) {
+                    if (user.getPassword().equalsIgnoreCase(request.getPassword())) {
+                        boolean success = userController.updateUser(user.getUser_id(), request.getGps_lat(), request.getGps_long());
+                        response.setError(false);
+                        response.setMessage("Register sucess.");
+                        response.setUser_id(user.getUser_id());
+                    } else {
+                        response.setError(true);
+                        response.setMessage("Wrong password");
+                        response.setUser_id(null);
+                    }
 
+                } else {
+
+                    String uuid = UUID.randomUUID().toString();
+                    user = new User();
+                    user.setGps_lat(request.getGps_lat());
+                    user.setGps_long(request.getGps_long());
+                    user.setPhoneNumber(request.getPhoneNumber());
+                    user.setUserName(request.getUserName());
+                    user.setUser_id(uuid);
+                    user.setTime(System.currentTimeMillis());
+                    user.setPassword(request.getPassword());
+                    if (userController.addUser(user)) {
+                        response.setError(false);
+                        response.setMessage("Register sucess.");
+                        response.setUser_id(uuid);
+                    }
+                }
             } else {
-                String uuid = UUID.randomUUID().toString();
-                user = new User();
-                user.setGps_lat(request.getGps_lat());
-                user.setGps_long(request.getGps_long());
-                user.setPhoneNumber(request.getPhoneNumber());
-                user.setUserName(request.getUserName());
-                user.setUser_id(uuid);
-                user.setTime(System.currentTimeMillis());
-                if (userController.addUser(user)) {
-                    response.setError(false);
-                    response.setMessage("Register sucess.");
-                    response.setUser_id(uuid);
+                response.setError(true);
+                response.setUser_id(null);
+                if (request.getUserName() == null && request.getPassword() == null && request.getPhoneNumber() == null) {
+                    response.setMessage("Values are null.");
+                } else if (request.getUserName() == null) {
+                    response.setMessage("UserName should not be null");
+                } else if (request.getPhoneNumber() == null) {
+                    response.setMessage("Phonenumber should not be null");
+                } else if (request.getPassword() == null) {
+                    response.setMessage("Password should not be null");
                 }
             }
 
+        } else {
+            response.setError(true);
+            response.setMessage("Request should not be null.");
+            response.setUser_id(null);
         }
         return response;
     }

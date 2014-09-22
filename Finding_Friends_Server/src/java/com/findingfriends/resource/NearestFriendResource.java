@@ -59,7 +59,7 @@ public class NearestFriendResource {
         ContactsController contactsController = new ContactsController();
         UserController userController = new UserController();
         ArrayList<UserWithDistance> listUsers = new ArrayList<>();
-        List<ContactModel> contact = contactsController.getallUser("67136125-0e8e-4933-a114-286154d87dd1");
+        List<ContactModel> contact = contactsController.getallUser("5ef95ca1-e382-40ee-8c26-da9b4368cb82");
         String result = "";
         for (ContactModel model : contact) {
             User user;
@@ -76,8 +76,8 @@ public class NearestFriendResource {
             Collections.sort(listUsers);
 
         }
-        for (UserWithDistance use : listUsers) {
-            result = result + ";" + use.getDist() + "";
+        for (UserWithDistance user : listUsers) {
+            result = result + ";" + user.getDist() + "";
         }
         return result;
     }
@@ -100,31 +100,40 @@ public class NearestFriendResource {
         ContactsController contactsController = new ContactsController();
         UserController userController = new UserController();
         ArrayList<UserWithDistance> listUsers = new ArrayList<>();
-        if (userController.updateUser(request.getUser_id(), request.getLat(), request.getLog())) {
-            List<ContactModel> contact = contactsController.getallUser(request.getUser_id());
-            for (ContactModel model : contact) {
-                User user;
-                UserWithDistance userWithDistance = new UserWithDistance();
-                user = userController.getUserById(model.getUser_id());
-                user.setUserName(model.getName());
-                userWithDistance.setUser(user);
-                double dist = DistanceUtils.distance(user.getGps_lat(), user.getGps_long(), request.getLat(), request.getLog());
-                userWithDistance.setDist(dist);
-                listUsers.add(userWithDistance);
-            }
-            Collections.sort(listUsers);
-        }
         NearestFriendResponse response = new NearestFriendResponse();
-        if (listUsers.size() < 5) {
-            response.setCount(listUsers.size());
-            response.setNearestPeople(listUsers);
-        } else {
-            response.setCount(5);
-            ArrayList<UserWithDistance> users = new ArrayList<>();
-            for (int i = 0; i < 5; i++) {
-                users.add(listUsers.get(i));
+        if (request.getUser_id() != null) {
+            if (userController.updateUser(request.getUser_id(), request.getLat(), request.getLog())) {
+                List<ContactModel> contact = contactsController.getallUser(request.getUser_id());
+                for (ContactModel model : contact) {
+                    if (!model.getUser_id().equals(request.getUser_id())) {
+                        User user;
+                        UserWithDistance userWithDistance = new UserWithDistance();
+                        user = userController.getUserById(model.getUser_id());
+                        user.setUserName(model.getName());
+                        userWithDistance.setUser(user);
+                        double dist = DistanceUtils.distance(user.getGps_lat(), user.getGps_long(), request.getLat(), request.getLog());
+                        userWithDistance.setDist(dist);
+                        listUsers.add(userWithDistance);
+                    }
+                }
+                Collections.sort(listUsers);
             }
-            response.setNearestPeople(users);
+
+            if (listUsers.size() < 5) {
+                response.setCount(listUsers.size());
+                response.setNearestPeople(listUsers);
+            } else {
+                response.setCount(5);
+                ArrayList<UserWithDistance> users = new ArrayList<>();
+                for (int i = 0; i < 5; i++) {
+                    users.add(listUsers.get(i));
+                }
+                response.setNearestPeople(users);
+            }
+        } else {
+            response.setCount(0);
+            response.setError(true);
+            response.setMessage("user_id must not be null.");
         }
         return response;
     }
@@ -144,7 +153,7 @@ public class NearestFriendResource {
             UserWithDistance userWithDistance = new UserWithDistance();
             userWithDistance.setUser(user);
             double dist = DistanceUtils.distance(user.getGps_lat(), user.getGps_long(), request.getGps_lat(), request.getGps_long());
-           System.out.println(dist);
+            System.out.println(dist);
             userWithDistance.setDist(dist);
             listUsers.add(userWithDistance);
         }

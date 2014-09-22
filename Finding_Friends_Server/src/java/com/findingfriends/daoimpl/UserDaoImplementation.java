@@ -29,7 +29,7 @@ public class UserDaoImplementation implements UserDao {
 
     @Override
     public boolean addUser(User user) {
-        String sql = "INSERT INTO user(`name`,`phonenumber`,`user_id`,`gps_lat`,`gps_long`,`time`) VALUES('" + user.getUserName() + "','" + user.getPhoneNumber() + "','" + user.getUser_id() + "','" + user.getGps_lat() + "','" + user.getGps_long() + "','" + user.getTime() + "');";
+        String sql = "INSERT INTO user(`name`,`phonenumber`,`user_id`,`gps_lat`,`gps_long`,`time`,`password`) VALUES('" + user.getUserName() + "','" + user.getPhoneNumber() + "','" + user.getUser_id() + "','" + user.getGps_lat() + "','" + user.getGps_long() + "','" + user.getTime() + "','" + user.getPassword() + "');";
         try {
             con = SQLUtility.getConnection();
             stmt = con.createStatement();
@@ -109,6 +109,7 @@ public class UserDaoImplementation implements UserDao {
                 double gps_lat = rs.getDouble("gps_lat");
                 double gps_long = rs.getDouble("gps_long");
                 long time = rs.getLong("time");
+                String password=rs.getString("password");
                 user = new User();
                 user.setPhoneNumber(phoneNumbers);
                 user.setUserName(userName);
@@ -116,6 +117,7 @@ public class UserDaoImplementation implements UserDao {
                 user.setGps_long(gps_long);
                 user.setUser_id(userId);
                 user.setTime(time);
+                user.setPassword(password);
 
             }
         } catch (InstantiationException ex) {
@@ -164,6 +166,7 @@ public class UserDaoImplementation implements UserDao {
                 double gps_lat = rs.getDouble("gps_lat");
                 double gps_long = rs.getDouble("gps_long");
                 long time = rs.getLong("time");
+                String password=rs.getString("password");
                 user = new User();
                 user.setPhoneNumber(phoneNumbers);
                 user.setUserName(userName);
@@ -171,6 +174,7 @@ public class UserDaoImplementation implements UserDao {
                 user.setGps_long(gps_long);
                 user.setUser_id(user_id);
                 user.setTime(time);
+                user.setPassword(password);
 
             }
         } catch (InstantiationException ex) {

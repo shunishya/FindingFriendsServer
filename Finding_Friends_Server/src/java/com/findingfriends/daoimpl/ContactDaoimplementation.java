@@ -58,7 +58,7 @@ public class ContactDaoimplementation implements ContactsDao {
     public List<ContactModel> displayAllContactOfUser(String user_id) {
         List<ContactModel> contactList = new ArrayList<ContactModel>();
 
-        String sql = "SELECT * from contacts WHERE `parent_id`= '" + user_id + "';";
+        String sql = "SELECT * from contacts WHERE `parent_id`= '" + user_id +"';";
         try {
             con = SQLUtility.getConnection();
             stmt = con.createStatement();
