@@ -18,9 +18,13 @@ import java.util.logging.Logger;
 public class SQLUtility {
 
     static String driver = "com.mysql.jdbc.Driver";
-    static String DB_Username = "admin3DMHggf";
-    static String DB_password = "bk7HfhXNZPRg";
-    static String DB_URL = "jdbc:mysql://541947b7500446613e000b86-friendsandfamily.rhcloud.com:46231/finding";
+//    static String DB_Username = "admin3DMHggf";
+//    static String DB_password = "bk7HfhXNZPRg";
+//    static String DB_URL = "jdbc:mysql://541947b7500446613e000b86-friendsandfamily.rhcloud.com:46231/finding";
+    
+     static String DB_Username = "root";
+    static String DB_password = "";
+    static String DB_URL = "jdbc:mysql://localhost:3306/finding_friends";
 
     public static Connection getConnection() throws InstantiationException, IllegalAccessException, SQLException {
 

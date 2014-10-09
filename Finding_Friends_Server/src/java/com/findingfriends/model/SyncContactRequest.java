@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.findingfriends.model;
 
 import java.util.List;
@@ -13,9 +12,19 @@ import java.util.List;
  * @author nitu
  */
 public class SyncContactRequest {
+
     private String user_id;
     private List<ContactModel> contactsTobeAdd;
     private List<String> contactsToBeDeleted;
+    private String device_id;
+
+    public String getDevice_id() {
+        return device_id;
+    }
+
+    public void setDevice_id(String device_id) {
+        this.device_id = device_id;
+    }
 
     public String getUser_id() {
         return user_id;
@@ -40,6 +49,5 @@ public class SyncContactRequest {
     public void setContactsToBeDeleted(List<String> contactsToBeDeleted) {
         this.contactsToBeDeleted = contactsToBeDeleted;
     }
-   
-    
+
 }

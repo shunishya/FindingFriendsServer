@@ -56,30 +56,7 @@ public class NearestFriendResource {
     @Produces("application/json")
     public String getJson() {
         //TODO return proper representation object
-        ContactsController contactsController = new ContactsController();
-        UserController userController = new UserController();
-        ArrayList<UserWithDistance> listUsers = new ArrayList<>();
-        List<ContactModel> contact = contactsController.getallUser("5ef95ca1-e382-40ee-8c26-da9b4368cb82");
-        String result = "";
-        for (ContactModel model : contact) {
-            User user;
-            UserWithDistance userWithDistance = new UserWithDistance();
-            user = userController.getUserById(model.getUser_id());
-            user.setUserName(model.getName());
-
-            user = userController.getUserById(model.getUser_id());
-            user.setUserName(model.getName());
-            userWithDistance.setUser(user);
-            double dist = DistanceUtils.distance(user.getGps_lat(), user.getGps_long(), 27.6783159, 85.3487139);
-            userWithDistance.setDist(dist);
-            listUsers.add(userWithDistance);
-            Collections.sort(listUsers);
-
-        }
-        for (UserWithDistance user : listUsers) {
-            result = result + ";" + user.getDist() + "";
-        }
-        return result;
+        return "result";
     }
 
     /**
@@ -103,7 +80,7 @@ public class NearestFriendResource {
         NearestFriendResponse response = new NearestFriendResponse();
         if (request.getUser_id() != null) {
             if (userController.updateUser(request.getUser_id(), request.getLat(), request.getLog())) {
-                List<ContactModel> contact = contactsController.getallUser(request.getUser_id());
+                List<ContactModel> contact = contactsController.getallUser(request.getUser_id(), request.getDevice_id());
                 for (ContactModel model : contact) {
                     if (!model.getUser_id().equals(request.getUser_id())) {
                         User user;

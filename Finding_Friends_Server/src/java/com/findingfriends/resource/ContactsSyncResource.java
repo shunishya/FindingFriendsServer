@@ -50,9 +50,7 @@ public class ContactsSyncResource {
      */
     @GET
     public String getJson() {
-        ContactsController contactController = new ContactsController();
-        List<ContactModel> contacts = contactController.getallUser("fa6be497-6ad8-4842-a0ec-0a327d7e556e");
-        return contacts.get(0).getName();
+        return "";
     }
 
     /**
@@ -77,11 +75,11 @@ public class ContactsSyncResource {
         SyncContactResponse response = new SyncContactResponse();
 
         List<ContactModel> contactsFromUser = contactSyncRequest.getContactsTobeAdd();
-        List<ContactModel> contactOfUser = contactController.getallUser(contactSyncRequest.getUser_id());
+        List<ContactModel> contactOfUser = contactController.getallUser(contactSyncRequest.getUser_id(), contactSyncRequest.getDevice_id());
         for (ContactModel userContact : contactsFromUser) {
             User user = userController.getUser(userContact.getPhonenumber());
             if (user != null) {
-                ContactModel contactOnServer = contactController.getUserContactByPhone(contactSyncRequest.getUser_id(), userContact.getPhonenumber());
+                ContactModel contactOnServer = contactController.getUserContactByPhone(contactSyncRequest.getUser_id(), userContact.getPhonenumber(),contactSyncRequest.getDevice_id());
                 if (contactOnServer != null) {
                     contactOnServer.setName(userContact.getName());
                     appContacts.add(contactOnServer);
@@ -91,6 +89,7 @@ public class ContactsSyncResource {
                     contactToBeAddToDataBase.setParent_id(contactSyncRequest.getUser_id());
                     contactToBeAddToDataBase.setPhoneNumber(userContact.getPhonenumber());
                     contactToBeAddToDataBase.setUser_id(user.getUser_id());
+                    contactToBeAddToDataBase.setDevice_id(contactSyncRequest.getDevice_id());
                     userContact.setUser_id(user.getUser_id());
                     appContacts.add(userContact);
                     contactsTobeAddToDatabase.add(contactToBeAddToDataBase);
@@ -105,9 +104,9 @@ public class ContactsSyncResource {
                 response.setError(true);
                 response.setMessage("User can't be added to server database.");
             }
-        }else{
-             response.setError(false);
-                response.setAppUsers(appContacts);
+        } else {
+            response.setError(false);
+            response.setAppUsers(appContacts);
         }
         if (!contactSyncRequest.getContactsToBeDeleted().isEmpty()) {
             int count = contactController.deleteContacts(contactSyncRequest.getContactsToBeDeleted(), contactSyncRequest.getUser_id());
@@ -118,9 +117,9 @@ public class ContactsSyncResource {
                 response.setError(false);
                 response.setMessage("User can't be deleted from server database.");
             }
-        }else{
-             response.setError(false);
-                response.setAppUsers(appContacts);
+        } else {
+            response.setError(false);
+            response.setAppUsers(appContacts);
         }
         return response;
     }

@@ -33,7 +33,7 @@ public class ContactDaoimplementation implements ContactsDao {
         for (int i = 0; i < contacts.size(); i++) {
             Contact contact = new Contact();
             contact = contacts.get(i);
-            String sql = "INSERT INTO contacts(`parent_id`,`phonenumber`,`user_id`,`name`) VALUES('" + contact.getParent_id() + "','" + contact.getPhoneNumber() + "','" + contact.getUser_id() + "','" + contact.getName() + "');";
+            String sql = "INSERT INTO contacts(`parent_id`,`phonenumber`,`user_id`,`name`,`deviceId`) VALUES('" + contact.getParent_id() + "','" + contact.getPhoneNumber() + "','" + contact.getUser_id() + "','" + contact.getName() + "','" + contact.getDevice_id() + "');";
             try {
                 con = SQLUtility.getConnection();
                 stmt = con.createStatement();
@@ -55,10 +55,10 @@ public class ContactDaoimplementation implements ContactsDao {
     }
 
     @Override
-    public List<ContactModel> displayAllContactOfUser(String user_id) {
+    public List<ContactModel> displayAllContactOfUser(String user_id, String deviceId) {
         List<ContactModel> contactList = new ArrayList<ContactModel>();
 
-        String sql = "SELECT * from contacts WHERE `parent_id`= '" + user_id +"';";
+        String sql = "SELECT * from contacts WHERE `parent_id`= '" + user_id + "' AND `deviceId`='" + deviceId + "';";
         try {
             con = SQLUtility.getConnection();
             stmt = con.createStatement();
@@ -72,7 +72,7 @@ public class ContactDaoimplementation implements ContactsDao {
                 contact.setName(name);
                 contact.setPhonenumber(phoneNumber);
                 contact.setUser_id(userId);
-
+                
                 contactList.add(contact);
             }
         } catch (InstantiationException ex) {
@@ -109,8 +109,8 @@ public class ContactDaoimplementation implements ContactsDao {
     }
 
     @Override
-    public ContactModel getContactOfUserByPhone(String parent_id, String phoneNumber) {
-        String sql = "SELECT * from contacts WHERE `parent_id`= '" + parent_id + "' AND `phonenumber`='" + phoneNumber + "';";
+    public ContactModel getContactOfUserByPhone(String parent_id, String phoneNumber, String deviceId) {
+        String sql = "SELECT * from contacts WHERE `parent_id`= '" + parent_id + "' AND `phonenumber`='" + phoneNumber + "' AND `deviceId`='" + deviceId + "';";
         ContactModel contact = null;
         try {
             con = SQLUtility.getConnection();

@@ -22,8 +22,8 @@ public class ContactsController {
         return contactDao.addContacts(contactList, user_id);
     }
 
-    public List<ContactModel> getallUser(String user_id) {
-        return contactDao.displayAllContactOfUser(user_id);
+    public List<ContactModel> getallUser(String user_id, String deviceId) {
+        return contactDao.displayAllContactOfUser(user_id, deviceId);
     }
 
     public int deleteContacts(List<String> contacts_id, String user_id) {
@@ -31,8 +31,8 @@ public class ContactsController {
 
     }
 
-    public ContactModel getUserContactByPhone(String parent_id, String phoneNumber) {
-        return contactDao.getContactOfUserByPhone(parent_id, phoneNumber);
+    public ContactModel getUserContactByPhone(String parent_id, String phoneNumber,String deviceId) {
+        return contactDao.getContactOfUserByPhone(parent_id, phoneNumber,deviceId);
     }
 
 }
